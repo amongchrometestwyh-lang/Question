@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>  - 700 </title>
+    <title>لعبة اللامعقول - 400 سؤال</title>
     <style>
-        /*   */
+        /* إعدادات عامة وألوان الأبيض والأسود */
         :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --success: #27ae60;
-            --danger: #e74c3c;
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-            --gold: #d4af37;
+            --black: #000000;
+            --dark-gray: #333333;
+            --gray: #777777;
+            --light-gray: #dddddd;
+            --off-white: #f5f5f5;
+            --white: #ffffff;
         }
 
         * {
@@ -24,44 +23,45 @@
         }
 
         body {
-            background-color: var(--bg-color);
-            color: #111;
+            background-color: var(--off-white);
+            color: var(--black);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
             padding: 15px;
         }
 
         #game-container {
-            background-color: var(--card-bg);
+            background-color: var(--white);
             width: 100%;
             max-width: 650px;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-            border: 1px solid #eef0f2;
+            padding: 35px 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid var(--black);
             text-align: center;
             position: relative;
-            overflow: hidden;
+            /* تم إزالة overflow: hidden لمنع قص الحروف العربية */
         }
 
         h1 {
             font-size: clamp(24px, 5vw, 32px);
             margin-bottom: 10px;
             font-weight: 900;
-            color: var(--primary);
+            color: var(--black);
+            line-height: 1.4;
         }
 
         p.subtitle {
-            color: #7f8c8d;
+            color: var(--gray);
             font-size: clamp(14px, 3vw, 16px);
             margin-bottom: 25px;
+            line-height: 1.5;
         }
 
-        /* ====   ( ) ==== */
+        /* ==== شاشة البداية (اختيار العدد) ==== */
         .num-btns-container {
             display: flex;
             flex-wrap: wrap;
@@ -71,61 +71,60 @@
         }
 
         .num-btn {
-            background-color: #f8f9fa;
-            border: 2px solid #e9ecef;
+            background-color: var(--white);
+            border: 2px solid var(--black);
             padding: 12px 20px;
-            border-radius: 12px;
+            border-radius: 8px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.2s ease;
-            color: var(--primary);
+            color: var(--black);
         }
 
-        .num-btn:hover, .num-btn.active {
-            border-color: var(--secondary);
-            background-color: #eaf4fc;
-            color: var(--secondary);
+        .num-btn:hover {
+            background-color: var(--black);
+            color: var(--white);
         }
 
         .custom-input {
             width: 100%;
             max-width: 200px;
             padding: 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
+            border: 2px solid var(--gray);
+            border-radius: 8px;
             font-size: 16px;
             text-align: center;
             outline: none;
             transition: border 0.3s;
             font-family: inherit;
+            color: var(--black);
         }
 
         .custom-input:focus {
-            border-color: var(--secondary);
+            border-color: var(--black);
         }
 
-        /*   */
+        /* شريط التقدم */
         #progress-container {
             width: 100%;
-            background-color: #e9ecef;
-            height: 10px;
+            background-color: var(--light-gray);
+            height: 8px;
             border-radius: 10px;
             margin-bottom: 15px;
-            overflow: hidden;
         }
 
         #progress-bar {
             height: 100%;
-            background: var(--secondary);
+            background-color: var(--black);
             width: 0%;
             border-radius: 10px;
             transition: width 0.4s ease;
         }
 
         #question-counter {
-            font-size: 14px;
-            color: #95a5a6;
+            font-size: 15px;
+            color: var(--gray);
             margin-bottom: 20px;
             font-weight: bold;
         }
@@ -134,11 +133,12 @@
             font-size: clamp(20px, 4.5vw, 26px);
             font-weight: bold;
             margin-bottom: 25px;
-            line-height: 1.5;
-            color: #2c3e50;
+            line-height: 1.7; /* تم تكبير المسافة بين السطور لمنع قص الحروف */
+            color: var(--black);
+            word-wrap: break-word;
         }
 
-        /*   */
+        /* أزرار الاختيارات */
         .options-container {
             display: flex;
             flex-direction: column;
@@ -146,163 +146,174 @@
         }
 
         .mcq-btn {
-            background-color: #fff;
-            color: var(--primary);
-            border: 2px solid #e0e6ed;
-            padding: 15px 20px;
+            background-color: var(--white);
+            color: var(--black);
+            border: 2px solid var(--light-gray);
+            padding: 18px 20px;
             font-size: clamp(16px, 4vw, 18px);
             font-weight: bold;
-            border-radius: 14px;
+            border-radius: 10px;
             cursor: pointer;
             font-family: inherit;
             transition: all 0.2s ease;
             width: 100%;
+            white-space: normal; /* السماح بتعدد السطور */
+            line-height: 1.5; /* حماية إضافية للحروف السفلية */
+            word-break: break-word;
         }
 
         .mcq-btn:hover {
-            border-color: var(--secondary);
-            background-color: #f4f9fd;
+            border-color: var(--black);
+            background-color: var(--off-white);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.1);
         }
 
         .mcq-btn:active {
             transform: translateY(0);
+            background-color: var(--light-gray);
         }
 
-        /*   */
+        /* زر الأساسي */
         .primary-btn {
-            background-color: var(--primary);
-            color: #fff;
-            border: none;
+            background-color: var(--black);
+            color: var(--white);
+            border: 2px solid var(--black);
             padding: 16px 30px;
             font-size: 18px;
             font-weight: bold;
-            border-radius: 14px;
+            border-radius: 10px;
             cursor: pointer;
-            margin-top: 20px;
+            margin-top: 25px;
             width: 100%;
             transition: all 0.2s ease;
         }
 
         .primary-btn:hover {
-            background-color: #1a252f;
-            transform: translateY(-2px);
+            background-color: var(--white);
+            color: var(--black);
         }
 
-        /*   */
+        /* الحركات الانتقالية */
         .fade-in-up {
-            animation: fadeInUp 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+            animation: fadeInUp 0.4s ease forwards;
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .hidden { display: none !important; }
 
-        /*    */
+        /* شاشة نتيجة السؤال */
         #result-text {
             font-size: clamp(24px, 5vw, 28px);
             font-weight: 900;
             margin-bottom: 15px;
+            color: var(--black);
         }
 
         #correct-answer {
             font-size: clamp(18px, 4vw, 22px);
-            color: var(--primary);
+            color: var(--dark-gray);
             margin-bottom: 25px;
             padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 14px;
-            border: 2px dashed #bdc3c7;
+            background-color: var(--off-white);
+            border-radius: 10px;
+            border: 2px dashed var(--gray);
+            line-height: 1.6;
         }
 
-        .win { color: var(--success); } 
-        .lose { color: var(--danger); } 
-
-        /* ======   (  ) ====== */
+        /* ====== تصميم الشهادة بالأبيض والأسود ====== */
         .certificate-box {
-            border: 6px double var(--gold);
-            background-color: #fffaf0;
+            background-color: var(--white);
             padding: 30px 15px;
-            border-radius: 12px;
+            border-radius: 8px;
             position: relative;
             margin-top: 10px;
         }
 
-        /*   () */
+        /* حالة النجاح */
+        .certificate-box.passed {
+            border: 6px double var(--black);
+        }
+
+        /* حالة السقوط (الملحق) */
         .certificate-box.failed {
-            border-color: var(--danger);
-            background-color: #fff5f5;
+            border: 6px dashed var(--dark-gray);
+            background-color: var(--off-white);
         }
 
         .cert-title {
             font-size: clamp(24px, 6vw, 32px);
             font-weight: 900;
             margin-bottom: 10px;
+            color: var(--black);
         }
-
-        .certificate-box.passed .cert-title { color: #8b6508; }
-        .certificate-box.failed .cert-title { color: var(--danger); }
 
         .cert-subtitle {
             font-size: clamp(14px, 3.5vw, 16px);
-            color: #555;
+            color: var(--dark-gray);
             margin-bottom: 20px;
             font-weight: bold;
+            line-height: 1.6;
         }
 
         .score-fraction {
             font-size: clamp(40px, 10vw, 55px);
             font-weight: 900;
-            color: var(--primary);
+            color: var(--black);
             margin: 15px 0;
             direction: ltr;
             display: inline-block;
-            background: #fff;
+            background: var(--white);
             padding: 10px 25px;
-            border: 3px solid;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border: 3px solid var(--black);
+            border-radius: 10px;
         }
 
-        .certificate-box.passed .score-fraction { border-color: var(--gold); }
-        .certificate-box.failed .score-fraction { border-color: var(--danger); color: var(--danger); }
+        .certificate-box.failed .score-fraction { 
+            color: var(--dark-gray); 
+            border-color: var(--dark-gray); 
+        }
 
         .score-comment {
             font-size: clamp(18px, 4vw, 22px);
             font-weight: bold;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--black);
+            background-color: var(--off-white);
+            color: var(--black);
+            line-height: 1.6;
         }
 
         .stamp {
             position: absolute;
             bottom: 10px;
             left: 10px;
-            width: 70px;
-            height: 70px;
-            border: 4px solid;
+            width: 75px;
+            height: 75px;
+            border: 3px solid var(--black);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 900;
             font-size: clamp(14px, 3vw, 16px);
-            transform: rotate(-20deg);
-            opacity: 0.8;
-            background-color: rgba(255,255,255,0.8);
+            transform: rotate(-15deg);
+            background-color: rgba(255,255,255,0.9);
+            color: var(--black);
         }
 
-        .certificate-box.passed .stamp { border-color: var(--success); color: var(--success); }
-        .certificate-box.failed .stamp { border-color: var(--danger); color: var(--danger); font-size: 18px; }
+        .certificate-box.failed .stamp { 
+            border-style: dashed;
+        }
 
-        /*    */
+        /* تعديلات للموبايل */
         @media (max-width: 480px) {
-            #game-container { padding: 20px 15px; }
+            #game-container { padding: 25px 15px; }
             .primary-btn { padding: 14px 20px; }
         }
     </style>
@@ -312,24 +323,24 @@
     <div id="game-container">
         
         <div id="start-area" class="fade-in-up">
-            <h1>  </h1>
-            <p class="subtitle">    700 !     </p>
+            <h1>لعبة اللامعقول 🧠</h1>
+            <p class="subtitle">بنك أسئلة يوصل لـ 400 سؤال! اختار هتمتحن في كام سؤال؟</p>
             
             <div class="num-btns-container">
-                <button class="num-btn" onclick="setCustomNum(10)">10 </button>
-                <button class="num-btn" onclick="setCustomNum(50)">50 </button>
-                <button class="num-btn" onclick="setCustomNum(100)">100 </button>
+                <button class="num-btn" onclick="setCustomNum(10)">10 أسئلة</button>
+                <button class="num-btn" onclick="setCustomNum(50)">50 سؤال</button>
+                <button class="num-btn" onclick="setCustomNum(100)">100 سؤال</button>
             </div>
             
             <div style="margin-bottom: 20px;">
-                <input type="number" id="custom-num" class="custom-input" placeholder="   " min="1" max="700">
+                <input type="number" id="custom-num" class="custom-input" placeholder="أو اكتب رقم بمزاجك" min="1" max="400">
             </div>
 
-            <button class="primary-btn" onclick="startSetup()"> </button>
+            <button class="primary-btn" onclick="startSetup()">ابدأ الامتحان</button>
         </div>
 
         <div id="header-area" class="hidden">
-            <h1></h1>
+            <h1>اللامعقول</h1>
             <div id="progress-container">
                 <div id="progress-bar"></div>
             </div>
@@ -337,113 +348,112 @@
         </div>
         
         <div id="question-area" class="hidden">
-            <div id="question"> ...</div>
+            <div id="question">جاري التحميل...</div>
             <div id="options-container" class="options-container"></div>
         </div>
 
         <div id="result-area" class="hidden">
             <div id="result-text"></div>
             <div id="correct-answer"></div>
-            <button class="primary-btn" onclick="nextQuestion()"> </button>
+            <button class="primary-btn" onclick="nextQuestion()">السؤال التالي</button>
         </div>
 
         <div id="final-area" class="hidden">
             <div id="cert-box" class="certificate-box">
-                <div class="cert-title" id="cert-title-text">   </div>
-                <div class="cert-subtitle">         :</div>
+                <div class="cert-title" id="cert-title-text">شهادة إتمام الهبد 📜</div>
+                <div class="cert-subtitle">تشهد وزارة اللامعقول بأن اللاعب قد أنهى الاختبار وحصل على:</div>
                 
                 <div class="score-fraction" id="final-fraction">0 / 0</div>
                 
-                <div class="score-comment" id="score-comment"> ...</div>
+                <div class="score-comment" id="score-comment">جاري التقييم...</div>
                 
-                <div class="stamp" id="cert-stamp"></div>
+                <div class="stamp" id="cert-stamp">مُعتمد</div>
             </div>
-            <button class="primary-btn" onclick="location.reload()" style="margin-top: 15px;"> </button>
+            <button class="primary-btn" onclick="location.reload()" style="margin-top: 15px;">امتحن تاني</button>
         </div>
     </div>
 
     <script>
-        //    ( )
+        // مصفوفة الأسئلة الأساسية
         const uniqueQuestions = [
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", "  ", " "], a: "  " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", ""], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", ""], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: ["", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: [" ", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: ["", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: ["", " ", " "], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: ["", " ", ""], a: " " },
-            { q: "    ", options: ["", "", ""], a: "" },
-            { q: "   ", options: [" ", " ", " "], a: " " }
+            { q: "ما هو جمع كلمة مصر؟", options: ["أمصار", "امصير", "مصريات"], a: "امصير" },
+            { q: "ما هو مفرد كلمة بطاطس؟", options: ["بططوسة", "بطاطساية", "بطس"], a: "بططوسة" },
+            { q: "ما هو جمع كلمة أخطبوط؟", options: ["أخطبوطات", "تخاطيب", "خطابيط"], a: "تخاطيب" },
+            { q: "ما معنى كلمة ماء؟", options: ["سائل الحياة", "عصير شفاف", "مشروب غازي"], a: "عصير شفاف" },
+            { q: "ما هو مفرد كلمة مقص؟", options: ["مقصة", "قُصاصة", "مِقص"], a: "مقصة" },
+            { q: "ما هو جمع كلمة هواء؟", options: ["أهوية", "هوايات", "هواءات"], a: "أهوية" },
+            { q: "ما هو مفرد كلمة مكرونة؟", options: ["مكروناية", "مكرناية", "مكرون"], a: "مكرناية" },
+            { q: "ما هو جمع كلمة باب؟", options: ["بيبانكس", "أبواب", "بوابات"], a: "بيبانكس" },
+            { q: "ما هو مفرد كلمة خيار؟", options: ["خيارة", "خيرونة", "خويرة"], a: "خيرونة" },
+            { q: "ما معنى كلمة نوم؟", options: ["إغلاق العين", "بروفة للموت", "تحديث للجسم"], a: "بروفة للموت" },
+            { q: "ما هو جمع كلمة فيل؟", options: ["أفيال", "فلافيل", "فيلة"], a: "فلافيل" },
+            { q: "ما هو جمع كلمة إنترنت؟", options: ["إنترانتات", "شبكات", "نتوتة"], a: "إنترانتات" },
+            { q: "ما معنى كلمة شمس؟", options: ["كوكب مشتعل", "لمبة كبيرة", "قرص أصفر"], a: "لمبة كبيرة" },
+            { q: "ما هو جمع كلمة قمر؟", options: ["أقمار", "قمرات", "أقمور"], a: "أقمور" },
+            { q: "ما هو جمع كلمة نملة؟", options: ["نماليخ", "نمل", "أناميل"], a: "نماليخ" },
+            { q: "ما هو مفرد كلمة فلوس؟", options: ["فلس", "فلساية", "فلسة"], a: "فلساية" },
+            { q: "ما معنى كلمة مدرسة؟", options: ["مكان للتعليم", "سجن أطفال", "مبنى حكومي"], a: "سجن أطفال" },
+            { q: "ما هو مفرد كلمة تفاح؟", options: ["تفاحة", "تفحوحة", "تفافيح"], a: "تفحوحة" },
+            { q: "ما هو جمع كلمة حمار؟", options: ["حمير", "حمامير", "حمارات"], a: "حمامير" },
+            { q: "ما هو مفرد كلمة كوتشي؟", options: ["كوتش", "كوتشاية", "فرده"], a: "كوتشاية" },
+            { q: "ما معنى كلمة مستشفى؟", options: ["مكان للعلاج", "ورشة تصليح بشر", "صيدلية كبيرة"], a: "ورشة تصليح بشر" },
+            { q: "ما هو جمع كلمة عصفور؟", options: ["عصافيريز", "عصافير", "عصافيريات"], a: "عصافيريز" },
+            { q: "ما هو مفرد كلمة بسكويت؟", options: ["بسكوتة", "بسكويتاية", "بساكيت"], a: "بسكويتاية" },
+            { q: "ما هو جمع كلمة تلفزيون؟", options: ["تلفازات", "تلافزين", "تلفزيونات"], a: "تلافزين" },
+            { q: "ما معنى كلمة ثلاجة؟", options: ["دولاب بارد", "حافظة طعام", "صندوق الثلج"], a: "دولاب بارد" },
+            { q: "ما هو مفرد كلمة رجال؟", options: ["رجل", "راجول", "رجيل"], a: "راجول" },
+            { q: "ما هو جمع كلمة سرير؟", options: ["أسرّة", "سرايركس", "سراير"], a: "سرايركس" },
+            { q: "ما معنى كلمة طائرة؟", options: ["مركبة جوية", "أتوبيس بيطير", "صاروخ"], a: "أتوبيس بيطير" },
+            { q: "ما هو مفرد كلمة زهور؟", options: ["زهرة", "زهرورة", "أزهار"], a: "زهرورة" },
+            { q: "ما هو جمع كلمة بحر؟", options: ["بحار", "بحور", "بحابير"], a: "بحابير" },
+            { q: "ما معنى كلمة قهوة؟", options: ["مشروب ساخن", "بنزين المخ", "مياه سوداء"], a: "بنزين المخ" },
+            { q: "ما هو مفرد كلمة نظارات؟", options: ["نظارة", "نظروة", "نظار"], a: "نظروة" },
+            { q: "ما هو مفرد كلمة أسنان؟", options: ["سن", "سِنّوك", "أسنانة"], a: "سِنّوك" },
+            { q: "ما هو جمع كلمة موز؟", options: ["موزات", "مماويز", "أماويز"], a: "مماويز" },
+            { q: "ما معنى كلمة سرير؟", options: ["مكان للنوم", "شاحن بشري", "مرتبة"], a: "شاحن بشري" },
+            { q: "ما هو مفرد كلمة قطط؟", options: ["قطة", "قطقوطة", "قط"], a: "قطقوطة" },
+            { q: "ما هو جمع كلمة شارع؟", options: ["شوارع", "شواريع", "شوارعات"], a: "شواريع" },
+            { q: "ما معنى كلمة مطر؟", options: ["السما بتعيط", "قطرات ماء", "شاور رباني"], a: "السما بتعيط" },
+            { q: "ما هو جمع كلمة كمبيوتر؟", options: ["كمبيوترات", "كمباتر", "أجهزة"], a: "كمباتر" },
+            { q: "ما معنى كلمة امتحان؟", options: ["اختبار قدرات", "تعذيب قانوني", "ورقة أسئلة"], a: "تعذيب قانوني" },
+            { q: "ما هو مفرد كلمة ألوان؟", options: ["لون", "لوناية", "ألوانة"], a: "لوناية" },
+            { q: "ما هو مفرد كلمة بصل؟", options: ["بصلة", "بصلولة", "أبصال"], a: "بصلولة" },
+            { q: "ما معنى كلمة مدير؟", options: ["زعيم العصابة", "رئيس العمل", "صاحب الشركة"], a: "زعيم العصابة" },
+            { q: "ما هو جمع كلمة محفظة؟", options: ["محافظ", "محافيظ", "محفظات"], a: "محافيظ" },
+            { q: "ما معنى كلمة زواج؟", options: ["نص الدين", "فخ اختياري", "ارتباط قانوني"], a: "فخ اختياري" },
+            { q: "ما هو مفرد كلمة حشرات؟", options: ["حشرة", "حشروقة", "أحشار"], a: "حشروقة" },
+            { q: "ما معنى كلمة رياضة؟", options: ["عرق ببلاش", "بناء العضلات", "لعب الكورة"], a: "عرق ببلاش" },
+            { q: "ما هو مفرد كلمة أطباق؟", options: ["طبق", "طبقاية", "أطباقة"], a: "طبقاية" },
+            { q: "ما هو جمع كلمة سكين؟", options: ["سكاكين", "سكاكينو", "أسكان"], a: "سكاكينو" },
+            { q: "ما معنى كلمة راتب؟", options: ["فلوس الشغل", "ضيف خفيف", "مرتب شهري"], a: "ضيف خفيف" },
+            { q: "ما هو جمع كلمة لمبة؟", options: ["لمبات", "لماميب", "ألماب"], a: "لماميب" },
+            { q: "ما معنى كلمة ديناصور؟", options: ["حيوان منقرض", "سحلية متضخمة", "عظمة قديمة"], a: "سحلية متضخمة" },
+            { q: "ما هو مفرد كلمة أوراق؟", options: ["ورقة", "ورقوكة", "أوراقية"], a: "ورقوكة" },
+            { q: "ما معنى كلمة بنك؟", options: ["مؤسسة مالية", "دولاب الفلوس", "مكان للحرامية"], a: "دولاب الفلوس" },
+            { q: "ما هو جمع كلمة صاروخ؟", options: ["صواريخ", "صواريخكس", "صواريخات"], a: "صواريخكس" },
+            { q: "ما معنى كلمة صيف؟", options: ["فصل حار", "شواية بشرية", "إجازة طويلة"], a: "شواية بشرية" },
+            { q: "ما هو مفرد كلمة ألعاب؟", options: ["لعبة", "لعبوكة", "ألعابة"], a: "لعبوكة" },
+            { q: "ما هو جمع كلمة خروف؟", options: ["خرفان", "خرافيش", "أخراف"], a: "خرافيش" },
+            { q: "ما هو جمع كلمة ثعبان؟", options: ["ثعابين", "ثعابينكس", "ثعبانات"], a: "ثعابينكس" },
+            { q: "ما معنى كلمة شتاء؟", options: ["حفلة بطاطين", "فصل بارد", "مطر كتير"], a: "حفلة بطاطين" },
+            { q: "ما هو جمع كلمة حلة؟", options: ["حلل", "حللنج", "أحلال"], a: "حللنج" },
+            { q: "ما معنى كلمة بطانية؟", options: ["غطاء", "حضن صناعي", "قماش ثقيل"], a: "حضن صناعي" },
+            { q: "ما هو مفرد كلمة جزم؟", options: ["جزمة", "جزمايكا", "جزمية"], a: "جزمايكا" },
+            { q: "ما معنى كلمة تيك توك؟", options: ["تطبيق صيني", "تضييع وقت", "برنامج رقص"], a: "تضييع وقت" },
+            { q: "ما هو جمع كلمة كوب؟", options: ["أكواب", "كبابي", "كوبات"], a: "كبابي" },
+            { q: "ما هو مفرد كلمة مناخير؟", options: ["منخار", "منخروك", "أنف"], a: "منخروك" },
+            { q: "ما معنى كلمة مخدة؟", options: ["وسادة", "جراج الرأس", "قطن ناعم"], a: "جراج الرأس" },
+            { q: "ما هو جمع كلمة ليمون؟", options: ["ليمونات", "لمانين", "ألمان"], a: "لمانين" },
+            { q: "ما معنى كلمة منبه؟", options: ["ساعة", "صوت مزعج", "آلة للوقت"], a: "صوت مزعج" },
+            { q: "ما هو جمع كلمة صامولة؟", options: ["صواميل", "صماميلكس", "صامولات"], a: "صماميلكس" },
+            { q: "ما معنى كلمة زحمة؟", options: ["تكدس", "حفلة عربيات", "ازدحام"], a: "حفلة عربيات" },
+            { q: "ما هو جمع كلمة رصيف؟", options: ["أرصفة", "رصافيف", "أرصاف"], a: "رصافيف" },
+            { q: "ما معنى كلمة غباء؟", options: ["نقص ذكاء", "موهبة فطرية", "عدم فهم"], a: "موهبة فطرية" }
         ];
 
-        //     700      (     )
+        // بناء قاعدة بيانات الـ 400 سؤال
         let fullDatabase = [];
-        while(fullDatabase.length < 700) {
-            //         
+        while(fullDatabase.length < 400) {
             let randomQ = uniqueQuestions[Math.floor(Math.random() * uniqueQuestions.length)];
             fullDatabase.push(randomQ);
         }
@@ -452,26 +462,23 @@
         let currentIndex = 0;
         let correctAnswersCount = 0;
 
-        //     
         function setCustomNum(num) {
             document.getElementById('custom-num').value = num;
         }
 
-        //   
         function startSetup() {
             let inputVal = document.getElementById('custom-num').value;
             let num = parseInt(inputVal);
             
             if (isNaN(num) || num <= 0) {
-                alert("     !");
+                alert("اكتب رقم صحيح للأسئلة يا بطل!");
                 return;
             }
-            if (num > 700) {
-                alert("    700  !");
-                num = 700;
+            if (num > 400) {
+                alert("أقصى عدد للأسئلة هو 400 سؤال بس!");
+                num = 400;
             }
 
-            //        (  )
             selectedQuestions = fullDatabase.sort(() => Math.random() - 0.5).slice(0, num);
             
             document.getElementById("start-area").classList.add("hidden");
@@ -485,7 +492,7 @@
         function loadQuestion() {
             let progress = (currentIndex / selectedQuestions.length) * 100;
             document.getElementById("progress-bar").style.width = progress + "%";
-            document.getElementById("question-counter").innerText = ` ${currentIndex + 1}  ${selectedQuestions.length}`;
+            document.getElementById("question-counter").innerText = `السؤال ${currentIndex + 1} من ${selectedQuestions.length}`;
 
             if (currentIndex >= selectedQuestions.length) {
                 showFinalScore();
@@ -493,7 +500,6 @@
             }
 
             const currentQ = selectedQuestions[currentIndex];
-            
             const resultArea = document.getElementById("result-area");
             const questionArea = document.getElementById("question-area");
 
@@ -537,14 +543,12 @@
 
             const resultText = document.getElementById("result-text");
             if (isCorrect) {
-                resultText.innerText = "!  ";
-                resultText.className = "win";
+                resultText.innerText = "صح! عبقري 🥳";
             } else {
-                resultText.innerText = "!   ";
-                resultText.className = "lose";
+                resultText.innerText = "غلط! ركز شوية ❌";
             }
 
-            document.getElementById("correct-answer").innerHTML = `  :<br><strong>${currentQ.a}</strong>`;
+            document.getElementById("correct-answer").innerHTML = `الإجابة هي:<br><strong>${currentQ.a}</strong>`;
         }
 
         function nextQuestion() {
@@ -571,37 +575,25 @@
             const titleText = document.getElementById("cert-title-text");
             const stamp = document.getElementById("cert-stamp");
 
-            //   
             certBox.classList.remove("passed", "failed");
 
-            //    ( / )
             if (percentage >= 50) {
                 certBox.classList.add("passed");
-                titleText.innerText = "   ";
-                stamp.innerText = " ";
+                titleText.innerText = "شهادة إتمام الهبد 📜";
+                stamp.innerText = "ناجح";
                 
                 if (percentage >= 90) {
-                    commentElement.innerText = ": ..    ";
-                    commentElement.style.backgroundColor = "#d1fae5";
-                    commentElement.style.color = "#065f46";
+                    commentElement.innerText = "التقدير: امتياز.. عبقري في اللامعقول!";
                 } else if (percentage >= 70) {
-                    commentElement.innerText = ":  ..   ";
-                    commentElement.style.backgroundColor = "#fef3c7";
-                    commentElement.style.color = "#92400e";
+                    commentElement.innerText = "التقدير: جيد جداً.. ماشي حالك.";
                 } else {
-                    commentElement.innerText = ": ..    ";
-                    commentElement.style.backgroundColor = "#e0f2fe";
-                    commentElement.style.color = "#075985";
+                    commentElement.innerText = "التقدير: مقبول.. نجاح بالعافية.";
                 }
             } else {
-                //   ()
                 certBox.classList.add("failed");
-                titleText.innerText = "  () ";
-                stamp.innerText = " ";
-                
-                commentElement.innerText = ":  ..       ! ";
-                commentElement.style.backgroundColor = "#fee2e2";
-                commentElement.style.color = "#991b1b";
+                titleText.innerText = "إخطار رسوب (ملحق) 🚨";
+                stamp.innerText = "ساقط";
+                commentElement.innerText = "التقدير: ضعيف جداً.. نتقابل في الملحق الصيفي! 😭";
             }
         }
     </script>
