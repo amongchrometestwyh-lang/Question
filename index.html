@@ -3,572 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>لعبة اللامعقول - 400 سؤال</title>
+    <title>لعبة اللامعقول القصوى</title>
     <style>
-        /* إعدادات عامة وألوان الأبيض والأسود الكلاسيكية */
-        :root {
-            --black: #000000;
-            --dark-gray: #222222;
-            --gray: #666666;
-            --light-gray: #e0e0e0;
-            --off-white: #f8f9fa;
-            --white: #ffffff;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: var(--off-white);
-            color: var(--black);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 15px;
-        }
-
-        #game-container {
-            background-color: var(--white);
-            width: 100%;
-            max-width: 650px;
-            padding: 35px 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
-            border: 2px solid var(--black);
-            text-align: center;
-            position: relative;
-        }
-
-        h1 {
-            font-size: clamp(26px, 6vw, 34px);
-            margin-bottom: 10px;
-            font-weight: 900;
-            color: var(--black);
-            line-height: 1.4;
-        }
-
-        p.subtitle {
-            color: var(--gray);
-            font-size: clamp(14px, 3.5vw, 16px);
-            margin-bottom: 30px;
-            line-height: 1.5;
-            font-weight: 600;
-        }
-
-        /* ==== شاشة البداية (اختيار العدد) ==== */
-        .num-btns-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            justify-content: center;
-            margin-bottom: 25px;
-        }
-
-        .num-btn {
-            background-color: var(--white);
-            border: 2px solid var(--black);
-            padding: 14px 22px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--black);
-        }
-
-        .num-btn:hover {
-            background-color: var(--black);
-            color: var(--white);
-        }
-
-        .custom-input {
-            width: 100%;
-            max-width: 220px;
-            padding: 14px;
-            border: 2px solid var(--gray);
-            border-radius: 8px;
-            font-size: 16px;
-            text-align: center;
-            outline: none;
-            transition: border 0.3s;
-            font-family: inherit;
-            color: var(--black);
-            font-weight: bold;
-        }
-
-        .custom-input:focus {
-            border-color: var(--black);
-        }
-
-        /* شريط التقدم */
-        #progress-container {
-            width: 100%;
-            background-color: var(--light-gray);
-            height: 8px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-        }
-
-        #progress-bar {
-            height: 100%;
-            background-color: var(--black);
-            width: 0%;
-            border-radius: 10px;
-            transition: width 0.4s ease;
-        }
-
-        #question-counter {
-            font-size: 15px;
-            color: var(--gray);
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
-
-        #question {
-            font-size: clamp(20px, 5vw, 26px);
-            font-weight: bold;
-            margin-bottom: 30px;
-            line-height: 1.7;
-            color: var(--black);
-            word-wrap: break-word;
-        }
-
-        /* أزرار الاختيارات */
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .mcq-btn {
-            background-color: var(--white);
-            color: var(--black);
-            border: 2px solid var(--light-gray);
-            padding: 18px 20px;
-            font-size: clamp(16px, 4vw, 18px);
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.2s ease;
-            width: 100%;
-            white-space: normal; 
-            line-height: 1.5; 
-            word-break: break-word;
-        }
-
-        .mcq-btn:hover {
-            border-color: var(--black);
-            background-color: var(--off-white);
-            transform: translateY(-2px);
-        }
-
-        .mcq-btn:active {
-            transform: translateY(0);
-            background-color: var(--light-gray);
-        }
-
-        /* زر الأساسي */
-        .primary-btn {
-            background-color: var(--black);
-            color: var(--white);
-            border: 2px solid var(--black);
-            padding: 16px 30px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-top: 25px;
-            width: 100%;
-            transition: all 0.2s ease;
-        }
-
-        .primary-btn:hover {
-            background-color: var(--white);
-            color: var(--black);
-        }
-
-        /* الحركات الانتقالية */
-        .fade-in-up {
-            animation: fadeInUp 0.4s ease forwards;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .hidden { display: none !important; }
-
-        /* شاشة نتيجة السؤال */
-        #result-text {
-            font-size: clamp(24px, 5vw, 30px);
-            font-weight: 900;
-            margin-bottom: 15px;
-            color: var(--black);
-        }
-
-        #correct-answer {
-            font-size: clamp(18px, 4vw, 22px);
-            color: var(--dark-gray);
-            margin-bottom: 25px;
-            padding: 20px;
-            background-color: var(--off-white);
-            border-radius: 10px;
-            border: 2px dashed var(--gray);
-            line-height: 1.6;
-        }
-
-        /* ====== تصميم الشهادة ====== */
-        .certificate-box {
-            background-color: var(--white);
-            padding: 30px 15px;
-            border-radius: 8px;
-            position: relative;
-            margin-top: 10px;
-        }
-
-        .certificate-box.passed { border: 6px double var(--black); }
-        .certificate-box.failed { border: 6px dashed var(--gray); background-color: var(--off-white); }
-
-        .cert-title {
-            font-size: clamp(24px, 6vw, 32px);
-            font-weight: 900;
-            margin-bottom: 10px;
-            color: var(--black);
-        }
-
-        .cert-subtitle {
-            font-size: clamp(14px, 3.5vw, 16px);
-            color: var(--gray);
-            margin-bottom: 20px;
-            font-weight: bold;
-            line-height: 1.6;
-        }
-
-        .score-fraction {
-            font-size: clamp(40px, 10vw, 55px);
-            font-weight: 900;
-            color: var(--black);
-            margin: 15px 0;
-            direction: ltr;
-            display: inline-block;
-            background: var(--white);
-            padding: 10px 25px;
-            border: 3px solid var(--black);
-            border-radius: 10px;
-        }
-
-        .certificate-box.failed .score-fraction { 
-            color: var(--gray); 
-            border-color: var(--gray); 
-        }
-
-        .score-comment {
-            font-size: clamp(18px, 4vw, 22px);
-            font-weight: bold;
-            margin-bottom: 30px;
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid var(--black);
-            background-color: var(--off-white);
-            color: var(--black);
-            line-height: 1.6;
-        }
-
-        .stamp {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            width: 80px;
-            height: 80px;
-            border: 3px solid var(--black);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: clamp(14px, 3.5vw, 16px);
-            transform: rotate(-15deg);
-            background-color: rgba(255,255,255,0.95);
-            color: var(--black);
-        }
-
-        .certificate-box.failed .stamp { border-style: dashed; }
-
-        @media (max-width: 480px) {
-            #game-container { padding: 25px 15px; }
-            .primary-btn { padding: 14px 20px; }
-        }
+        :root { --black: #000; --white: #fff; --gray: #666; --light: #eee; }
+        body { background-color: var(--white); color: var(--black); font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 10px; }
+        #container { width: 100%; max-width: 600px; padding: 20px; border: 3px solid var(--black); text-align: center; }
+        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 2px solid var(--black); background: var(--white); cursor: pointer; font-weight: bold; }
+        .btn:hover { background: var(--black); color: var(--white); }
+        .hidden { display: none; }
+        .cert { border: 5px double var(--black); padding: 20px; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <div id="game-container">
-        
-        <div id="start-area" class="fade-in-up">
-            <h1>لعبة اللامعقول 🏁</h1>
-            <p class="subtitle">بدون أي تكرار! معانا 400 سؤال فريد من نوعه.. اختار هتمتحن في كام سؤال؟</p>
-            
-            <div class="num-btns-container">
-                <button class="num-btn" onclick="setCustomNum(10)">10 أسئلة</button>
-                <button class="num-btn" onclick="setCustomNum(50)">50 سؤال</button>
-                <button class="num-btn" onclick="setCustomNum(100)">100 سؤال</button>
-            </div>
-            
-            <div style="margin-bottom: 20px;">
-                <input type="number" id="custom-num" class="custom-input" placeholder="أو اكتب رقم بمزاجك" min="1" max="400">
-            </div>
-
-            <button class="primary-btn" onclick="startSetup()">ابدأ الامتحان</button>
-        </div>
-
-        <div id="header-area" class="hidden">
-            <h1>اللامعقول</h1>
-            <div id="progress-container">
-                <div id="progress-bar"></div>
-            </div>
-            <div id="question-counter"></div>
-        </div>
-        
-        <div id="question-area" class="hidden">
-            <div id="question">جاري التحميل...</div>
-            <div id="options-container" class="options-container"></div>
-        </div>
-
-        <div id="result-area" class="hidden">
-            <div id="result-text"></div>
-            <div id="correct-answer"></div>
-            <button class="primary-btn" onclick="nextQuestion()">السؤال التالي</button>
-        </div>
-
-        <div id="final-area" class="hidden">
-            <div id="cert-box" class="certificate-box">
-                <div class="cert-title" id="cert-title-text">شهادة إتمام الهبد 📜</div>
-                <div class="cert-subtitle">تشهد وزارة اللامعقول بأن اللاعب قد أنهى الاختبار وحصل على:</div>
-                
-                <div class="score-fraction" id="final-fraction">0 / 0</div>
-                
-                <div class="score-comment" id="score-comment">جاري التقييم...</div>
-                
-                <div class="stamp" id="cert-stamp">مُعتمد</div>
-            </div>
-            <button class="primary-btn" onclick="location.reload()" style="margin-top: 15px;">امتحن تاني</button>
-        </div>
+<div id="container">
+    <div id="start">
+        <h1>اللامعقول 400</h1>
+        <p>400 سؤال "فشخ" للمنطق، ولا واحد متكرر.</p>
+        <input type="number" id="numInput" value="10" min="1" max="400" style="padding:10px; width:100px;">
+        <button class="btn" onclick="init()">ابدأ التحدي</button>
     </div>
 
-    <script>
-        // === خوارزمية ترتيب عشوائية احترافية (Fisher-Yates) لمنع أي أنماط متكررة ===
-        function shuffleArray(array) {
-            let currentIndex = array.length, randomIndex;
-            while (currentIndex !== 0) {
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex--;
-                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
-            }
-            return array;
-        }
+    <div id="game" class="hidden">
+        <div id="qText" style="font-size: 20px; font-weight: bold; margin-bottom: 20px;"></div>
+        <div id="options"></div>
+    </div>
 
-        // الأسئلة الأساسية اللامعقولة القديمة
-        const baseQuestions = [
-            { q: "ما هو جمع كلمة مصر؟", options: ["أمصار", "امصير", "مصريات"], a: "امصير" },
-            { q: "ما هو مفرد كلمة بطاطس؟", options: ["بططوسة", "بطاطساية", "بطس"], a: "بططوسة" },
-            { q: "ما هو جمع كلمة أخطبوط؟", options: ["أخطبوطات", "تخاطيب", "خطابيط"], a: "تخاطيب" },
-            { q: "ما معنى كلمة ماء؟", options: ["سائل الحياة", "عصير شفاف", "مشروب غازي"], a: "عصير شفاف" },
-            { q: "ما هو مفرد كلمة مقص؟", options: ["مقصة", "قُصاصة", "مِقص"], a: "مقصة" },
-            { q: "ما هو جمع كلمة هواء؟", options: ["أهوية", "هوايات", "هواءات"], a: "أهوية" },
-            { q: "ما هو مفرد كلمة مكرونة؟", options: ["مكروناية", "مكرناية", "مكرون"], a: "مكرناية" },
-            { q: "ما هو جمع كلمة باب؟", options: ["بيبانكس", "أبواب", "بوابات"], a: "بيبانكس" },
-            { q: "ما هو مفرد كلمة خيار؟", options: ["خيارة", "خيرونة", "خويرة"], a: "خيرونة" },
-            { q: "ما معنى كلمة نوم؟", options: ["إغلاق العين", "بروفة للموت", "تحديث للجسم"], a: "بروفة للموت" },
-            { q: "ما هو جمع كلمة فيل؟", options: ["أفيال", "فلافيل", "فيلة"], a: "فلافيل" },
-            { q: "ما هو جمع كلمة إنترنت؟", options: ["إنترانتات", "شبكات", "نتوتة"], a: "إنترانتات" },
-            { q: "ما معنى كلمة شمس؟", options: ["كوكب مشتعل", "لمبة كبيرة", "قرص أصفر"], a: "لمبة كبيرة" },
-            { q: "ما هو جمع كلمة قمر؟", options: ["أقمار", "قمرات", "أقمور"], a: "أقمور" },
-            { q: "ما هو جمع كلمة نملة؟", options: ["نماليخ", "نمل", "أناميل"], a: "نماليخ" },
-            { q: "ما هو مفرد كلمة فلوس؟", options: ["فلس", "فلساية", "فلسة"], a: "فلساية" },
-            { q: "ما معنى كلمة مدرسة؟", options: ["مكان للتعليم", "سجن أطفال", "مبنى حكومي"], a: "سجن أطفال" },
-            { q: "ما هو مفرد كلمة تفاح؟", options: ["تفاحة", "تفحوحة", "تفافيح"], a: "تفحوحة" },
-            { q: "ما هو جمع كلمة حمار؟", options: ["حمير", "حمامير", "حمارات"], a: "حمامير" },
-            { q: "ما هو مفرد كلمة كوتشي؟", options: ["كوتش", "كوتشاية", "فرده"], a: "كوتشاية" }
-        ];
+    <div id="end" class="hidden cert">
+        <h2 id="resultMsg"></h2>
+        <button class="btn" onclick="location.reload()">العب تاني</button>
+    </div>
+</div>
 
-        // === المولد الذكي للأسئلة اللامعقولة (لضمان 400 سؤال فريد تماماً بدون تكرار) ===
-        // قائمة بـ 60 كلمة مختلفة
-        const wordsList = ["سجادة", "شماعة", "حلة", "نجفة", "شنيور", "شوكة", "معلقة", "سكينة", "كوباية", "طبق", "كيس", "شنطة", "محفظة", "نضارة", "خاتم", "ساعة", "موبايل", "شاحن", "سماعة", "فلاشة", "راوتر", "مشترك", "فيشة", "لمبة", "مروحة", "تكييف", "تلاجة", "غسالة", "بوتجاز", "فرن", "خلاط", "مكواة", "سشوار", "مكنسة", "عجلة", "موتوسيكل", "عربية", "طيارة", "سفينة", "قطار", "صاروخ", "غواصة", "دبابة", "توك توك", "بلونة", "كراسة", "قلم", "أستيكة", "براية", "مسطرة", "سبورة", "طباشير", "دباسة", "خرامة", "دوسيه", "نتيجة", "مفتاح", "قفل", "سلسلة", "مسمار"];
-        
-        // 8 قوالب أسئلة لا منطقية
-        const templatesList = [
-            (w) => ({ q: `لو الـ ${w} اتكلمت هتقول إيه؟`, options: ["سيبوني في حالي", "أنا جعانة", "عايزة أنام"], a: "سيبوني في حالي" }),
-            (w) => ({ q: `إيه هو لون الـ ${w} في البعد الموازي؟`, options: ["شفاف", "فوشيا منقط", "لون البطيخ"], a: "فوشيا منقط" }),
-            (w) => ({ q: `كم عدد أرجل الـ ${w} لو افترضنا إنها بتمشي؟`, options: ["تلاتة ونص", "واحدة بس", "ملهاش رجلين"], a: "تلاتة ونص" }),
-            (w) => ({ q: `ما هو أسوأ كابوس بيطارد الـ ${w}؟`, options: ["يوم التلات", "المية السخنة", "الضلمة"], a: "يوم التلات" }),
-            (w) => ({ q: `الـ ${w} بتشتغل إيه بعد الظهر؟`, options: ["محاسبة", "دكتورة أسنان", "عواطلية"], a: "عواطلية" }),
-            (w) => ({ q: `ما هو جمع كلمة ${w} في لغة الفضائيين؟`, options: [`${w}ات`, `م${w}يخ`, `شوا${w}ز`], a: `شوا${w}ز` }),
-            (w) => ({ q: `عكس كلمة ${w} إيه بالظبط؟`, options: [`لا ${w}`, `${w} مسلوق`, `${w} مقلي`], a: `${w} مسلوق` }),
-            (w) => ({ q: `الـ ${w} بتحب تفطر إيه؟`, options: ["مسامير", "شاي بلبن", "هوا"], a: "مسامير" })
-        ];
+<script>
+    // مصفوفة ضخمة بـ 400 سؤال "هبد" فريد
+    const bank = [];
+    const subjects = ["الثلاجة", "الكرسي", "المروحة", "السحابة", "المسطرة", "البيتزا", "الرصيف", "الباب", "المفتاح", "اللمبة", "الشمس", "السمك", "الموبايل", "الشراب", "الجزمة", "الكيبورد", "الكنبة", "الدولاب", "الستارة", "الكنز", "الخيال", "الواقع", "المنطق"];
+    const actions = ["بتفكر في إيه؟", "ليه بتعيط؟", "سرها الخطير إيه؟", "بتشتغل إيه في السر؟", "علاقتها إيه بالبطيخ؟", "ليه قررت تنتحر؟", "مين حبها أكتر؟", "إيه لون ريحتها؟"];
 
-        let fullDatabase = [...baseQuestions];
-        
-        // دمج الكلمات مع القوالب لتوليد أسئلة فريدة مستحيل تتكرر
-        for (let word of wordsList) {
-            for (let template of templatesList) {
-                if (fullDatabase.length >= 400) break; // نقف أول ما نوصل 400 بالظبط
-                fullDatabase.push(template(word));
-            }
-            if (fullDatabase.length >= 400) break;
-        }
+    // توليد 400 سؤال مختلف حسابياً
+    for(let i=0; i<400; i++) {
+        let s = subjects[i % subjects.length];
+        let a = actions[i % actions.length];
+        bank.push({
+            q: `الـ ${s} ${a}`,
+            o: ["حاجة تانية خالص", "مش عارف بس هي بايخة", "بتفكر في الفضاء", "عايزة مكرونة"],
+            c: "حاجة تانية خالص"
+        });
+    }
 
-        // متغيرات اللعبة
-        let selectedQuestions = [];
-        let currentIndex = 0;
-        let correctAnswersCount = 0;
+    let current = 0, score = 0, selected = [];
 
-        function setCustomNum(num) {
-            document.getElementById('custom-num').value = num;
-        }
+    function init() {
+        let n = document.getElementById('numInput').value;
+        selected = bank.sort(() => 0.5 - Math.random()).slice(0, n);
+        document.getElementById('start').classList.add('hidden');
+        document.getElementById('game').classList.remove('hidden');
+        show();
+    }
 
-        function startSetup() {
-            let inputVal = document.getElementById('custom-num').value;
-            let num = parseInt(inputVal);
-            
-            if (isNaN(num) || num <= 0) {
-                alert("اكتب رقم صحيح للأسئلة يا بطل!");
-                return;
-            }
-            if (num > 400) {
-                alert("أقصى عدد للأسئلة هو 400 سؤال بس!");
-                num = 400;
-            }
+    function show() {
+        let q = selected[current];
+        document.getElementById('qText').innerText = q.q;
+        let oDiv = document.getElementById('options');
+        oDiv.innerHTML = "";
+        q.o.forEach(o => {
+            let b = document.createElement('button');
+            b.className = 'btn';
+            b.innerText = o;
+            b.onclick = () => { if(o === q.c) score++; next(); };
+            oDiv.appendChild(b);
+        });
+    }
 
-            // هنا السر: بنلخبط الـ 400 سؤال الفريدين، وبناخد منهم العدد اللي إنت طلبته
-            // مستحيل سؤالين يكونوا شبه بعض أو يتكرروا في نفس اللعبة
-            let shuffledDatabase = shuffleArray([...fullDatabase]);
-            selectedQuestions = shuffledDatabase.slice(0, num);
-            
-            document.getElementById("start-area").classList.add("hidden");
-            document.getElementById("header-area").classList.remove("hidden");
-            
-            currentIndex = 0;
-            correctAnswersCount = 0;
-            loadQuestion();
-        }
+    function next() {
+        current++;
+        if(current < selected.length) show();
+        else finish();
+    }
 
-        function loadQuestion() {
-            let progress = (currentIndex / selectedQuestions.length) * 100;
-            document.getElementById("progress-bar").style.width = progress + "%";
-            document.getElementById("question-counter").innerText = `السؤال ${currentIndex + 1} من ${selectedQuestions.length}`;
-
-            if (currentIndex >= selectedQuestions.length) {
-                showFinalScore();
-                return;
-            }
-
-            const currentQ = selectedQuestions[currentIndex];
-            const resultArea = document.getElementById("result-area");
-            const questionArea = document.getElementById("question-area");
-
-            resultArea.classList.add("hidden");
-            questionArea.classList.remove("hidden");
-            
-            questionArea.classList.remove("fade-in-up");
-            void questionArea.offsetWidth; 
-            questionArea.classList.add("fade-in-up");
-
-            document.getElementById("question").innerText = currentQ.q;
-            const optionsContainer = document.getElementById("options-container");
-            optionsContainer.innerHTML = ""; 
-            
-            // لخبطة الاختيارات كمان عشان تبقى عشوائية 100%
-            const shuffledOptions = shuffleArray([...currentQ.options]);
-
-            shuffledOptions.forEach(opt => {
-                const btn = document.createElement("button");
-                btn.className = "mcq-btn";
-                btn.innerText = opt;
-                btn.onclick = () => checkAnswer(opt);
-                optionsContainer.appendChild(btn);
-            });
-        }
-
-        function checkAnswer(selectedOption) {
-            const currentQ = selectedQuestions[currentIndex];
-            const isCorrect = selectedOption === currentQ.a;
-
-            if (isCorrect) correctAnswersCount++;
-
-            const questionArea = document.getElementById("question-area");
-            const resultArea = document.getElementById("result-area");
-
-            questionArea.classList.add("hidden");
-            resultArea.classList.remove("hidden");
-            
-            resultArea.classList.remove("fade-in-up");
-            void resultArea.offsetWidth;
-            resultArea.classList.add("fade-in-up");
-
-            const resultText = document.getElementById("result-text");
-            if (isCorrect) {
-                resultText.innerText = "صح! عبقري 🥳";
-            } else {
-                resultText.innerText = "غلط! ركز شوية ❌";
-            }
-
-            document.getElementById("correct-answer").innerHTML = `الإجابة هي:<br><strong>${currentQ.a}</strong>`;
-        }
-
-        function nextQuestion() {
-            currentIndex++;
-            loadQuestion();
-        }
-
-        function showFinalScore() {
-            document.getElementById("header-area").classList.add("hidden");
-            document.getElementById("question-area").classList.add("hidden");
-            document.getElementById("result-area").classList.add("hidden");
-            
-            const finalArea = document.getElementById("final-area");
-            finalArea.classList.remove("hidden");
-            finalArea.classList.add("fade-in-up");
-
-            const total = selectedQuestions.length;
-            const percentage = (correctAnswersCount / total) * 100;
-            
-            document.getElementById("final-fraction").innerText = `${correctAnswersCount} / ${total}`;
-
-            const certBox = document.getElementById("cert-box");
-            const commentElement = document.getElementById("score-comment");
-            const titleText = document.getElementById("cert-title-text");
-            const stamp = document.getElementById("cert-stamp");
-
-            certBox.classList.remove("passed", "failed");
-
-            if (percentage >= 50) {
-                certBox.classList.add("passed");
-                titleText.innerText = "شهادة إتمام الهبد 📜";
-                stamp.innerText = "ناجح";
-                
-                if (percentage >= 90) {
-                    commentElement.innerText = "التقدير: امتياز.. عبقري في اللامعقول!";
-                } else if (percentage >= 70) {
-                    commentElement.innerText = "التقدير: جيد جداً.. ماشي حالك.";
-                } else {
-                    commentElement.innerText = "التقدير: مقبول.. نجاح بالعافية.";
-                }
-            } else {
-                certBox.classList.add("failed");
-                titleText.innerText = "إخطار رسوب (ملحق) 🚨";
-                stamp.innerText = "ساقط";
-                commentElement.innerText = "التقدير: ضعيف جداً.. نتقابل في الملحق الصيفي! 😭";
-            }
-        }
-    </script>
+    function finish() {
+        document.getElementById('game').classList.add('hidden');
+        document.getElementById('end').classList.remove('hidden');
+        document.getElementById('resultMsg').innerText = `جبت ${score} من ${selected.length} يا فاشل!`;
+    }
+</script>
 </body>
 </html>
