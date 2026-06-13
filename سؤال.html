@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>  - 700 </title>
+    <style>
+        /*   */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --gold: #d4af37;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: #111;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 15px;
+        }
+
+        #game-container {
+            background-color: var(--card-bg);
+            width: 100%;
+            max-width: 650px;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eef0f2;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: clamp(24px, 5vw, 32px);
+            margin-bottom: 10px;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        p.subtitle {
+            color: #7f8c8d;
+            font-size: clamp(14px, 3vw, 16px);
+            margin-bottom: 25px;
+        }
+
+        /* ====   ( ) ==== */
+        .num-btns-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .num-btn {
+            background-color: #f8f9fa;
+            border: 2px solid #e9ecef;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--primary);
+        }
+
+        .num-btn:hover, .num-btn.active {
+            border-color: var(--secondary);
+            background-color: #eaf4fc;
+            color: var(--secondary);
+        }
+
+        .custom-input {
+            width: 100%;
+            max-width: 200px;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            text-align: center;
+            outline: none;
+            transition: border 0.3s;
+            font-family: inherit;
+        }
+
+        .custom-input:focus {
+            border-color: var(--secondary);
+        }
+
+        /*   */
+        #progress-container {
+            width: 100%;
+            background-color: #e9ecef;
+            height: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        #progress-bar {
+            height: 100%;
+            background: var(--secondary);
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.4s ease;
+        }
+
+        #question-counter {
+            font-size: 14px;
+            color: #95a5a6;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        #question {
+            font-size: clamp(20px, 4.5vw, 26px);
+            font-weight: bold;
+            margin-bottom: 25px;
+            line-height: 1.5;
+            color: #2c3e50;
+        }
+
+        /*   */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .mcq-btn {
+            background-color: #fff;
+            color: var(--primary);
+            border: 2px solid #e0e6ed;
+            padding: 15px 20px;
+            font-size: clamp(16px, 4vw, 18px);
+            font-weight: bold;
+            border-radius: 14px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            width: 100%;
+        }
+
+        .mcq-btn:hover {
+            border-color: var(--secondary);
+            background-color: #f4f9fd;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.1);
+        }
+
+        .mcq-btn:active {
+            transform: translateY(0);
+        }
+
+        /*   */
+        .primary-btn {
+            background-color: var(--primary);
+            color: #fff;
+            border: none;
+            padding: 16px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 14px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .primary-btn:hover {
+            background-color: #1a252f;
+            transform: translateY(-2px);
+        }
+
+        /*   */
+        .fade-in-up {
+            animation: fadeInUp 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hidden { display: none !important; }
+
+        /*    */
+        #result-text {
+            font-size: clamp(24px, 5vw, 28px);
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        #correct-answer {
+            font-size: clamp(18px, 4vw, 22px);
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 14px;
+            border: 2px dashed #bdc3c7;
+        }
+
+        .win { color: var(--success); } 
+        .lose { color: var(--danger); } 
+
+        /* ======   (  ) ====== */
+        .certificate-box {
+            border: 6px double var(--gold);
+            background-color: #fffaf0;
+            padding: 30px 15px;
+            border-radius: 12px;
+            position: relative;
+            margin-top: 10px;
+        }
+
+        /*   () */
+        .certificate-box.failed {
+            border-color: var(--danger);
+            background-color: #fff5f5;
+        }
+
+        .cert-title {
+            font-size: clamp(24px, 6vw, 32px);
+            font-weight: 900;
+            margin-bottom: 10px;
+        }
+
+        .certificate-box.passed .cert-title { color: #8b6508; }
+        .certificate-box.failed .cert-title { color: var(--danger); }
+
+        .cert-subtitle {
+            font-size: clamp(14px, 3.5vw, 16px);
+            color: #555;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .score-fraction {
+            font-size: clamp(40px, 10vw, 55px);
+            font-weight: 900;
+            color: var(--primary);
+            margin: 15px 0;
+            direction: ltr;
+            display: inline-block;
+            background: #fff;
+            padding: 10px 25px;
+            border: 3px solid;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .certificate-box.passed .score-fraction { border-color: var(--gold); }
+        .certificate-box.failed .score-fraction { border-color: var(--danger); color: var(--danger); }
+
+        .score-comment {
+            font-size: clamp(18px, 4vw, 22px);
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .stamp {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 70px;
+            height: 70px;
+            border: 4px solid;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: clamp(14px, 3vw, 16px);
+            transform: rotate(-20deg);
+            opacity: 0.8;
+            background-color: rgba(255,255,255,0.8);
+        }
+
+        .certificate-box.passed .stamp { border-color: var(--success); color: var(--success); }
+        .certificate-box.failed .stamp { border-color: var(--danger); color: var(--danger); font-size: 18px; }
+
+        /*    */
+        @media (max-width: 480px) {
+            #game-container { padding: 20px 15px; }
+            .primary-btn { padding: 14px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        
+        <div id="start-area" class="fade-in-up">
+            <h1>  </h1>
+            <p class="subtitle">    700 !     </p>
+            
+            <div class="num-btns-container">
+                <button class="num-btn" onclick="setCustomNum(10)">10 </button>
+                <button class="num-btn" onclick="setCustomNum(50)">50 </button>
+                <button class="num-btn" onclick="setCustomNum(100)">100 </button>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <input type="number" id="custom-num" class="custom-input" placeholder="   " min="1" max="700">
+            </div>
+
+            <button class="primary-btn" onclick="startSetup()"> </button>
+        </div>
+
+        <div id="header-area" class="hidden">
+            <h1></h1>
+            <div id="progress-container">
+                <div id="progress-bar"></div>
+            </div>
+            <div id="question-counter"></div>
+        </div>
+        
+        <div id="question-area" class="hidden">
+            <div id="question"> ...</div>
+            <div id="options-container" class="options-container"></div>
+        </div>
+
+        <div id="result-area" class="hidden">
+            <div id="result-text"></div>
+            <div id="correct-answer"></div>
+            <button class="primary-btn" onclick="nextQuestion()"> </button>
+        </div>
+
+        <div id="final-area" class="hidden">
+            <div id="cert-box" class="certificate-box">
+                <div class="cert-title" id="cert-title-text">   </div>
+                <div class="cert-subtitle">         :</div>
+                
+                <div class="score-fraction" id="final-fraction">0 / 0</div>
+                
+                <div class="score-comment" id="score-comment"> ...</div>
+                
+                <div class="stamp" id="cert-stamp"></div>
+            </div>
+            <button class="primary-btn" onclick="location.reload()" style="margin-top: 15px;"> </button>
+        </div>
+    </div>
+
+    <script>
+        //    ( )
+        const uniqueQuestions = [
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", "  ", " "], a: "  " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", ""], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", ""], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: ["", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: [" ", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: ["", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: ["", " ", " "], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: ["", " ", ""], a: " " },
+            { q: "    ", options: ["", "", ""], a: "" },
+            { q: "   ", options: [" ", " ", " "], a: " " }
+        ];
+
+        //     700      (     )
+        let fullDatabase = [];
+        while(fullDatabase.length < 700) {
+            //         
+            let randomQ = uniqueQuestions[Math.floor(Math.random() * uniqueQuestions.length)];
+            fullDatabase.push(randomQ);
+        }
+
+        let selectedQuestions = [];
+        let currentIndex = 0;
+        let correctAnswersCount = 0;
+
+        //     
+        function setCustomNum(num) {
+            document.getElementById('custom-num').value = num;
+        }
+
+        //   
+        function startSetup() {
+            let inputVal = document.getElementById('custom-num').value;
+            let num = parseInt(inputVal);
+            
+            if (isNaN(num) || num <= 0) {
+                alert("     !");
+                return;
+            }
+            if (num > 700) {
+                alert("    700  !");
+                num = 700;
+            }
+
+            //        (  )
+            selectedQuestions = fullDatabase.sort(() => Math.random() - 0.5).slice(0, num);
+            
+            document.getElementById("start-area").classList.add("hidden");
+            document.getElementById("header-area").classList.remove("hidden");
+            
+            currentIndex = 0;
+            correctAnswersCount = 0;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            let progress = (currentIndex / selectedQuestions.length) * 100;
+            document.getElementById("progress-bar").style.width = progress + "%";
+            document.getElementById("question-counter").innerText = ` ${currentIndex + 1}  ${selectedQuestions.length}`;
+
+            if (currentIndex >= selectedQuestions.length) {
+                showFinalScore();
+                return;
+            }
+
+            const currentQ = selectedQuestions[currentIndex];
+            
+            const resultArea = document.getElementById("result-area");
+            const questionArea = document.getElementById("question-area");
+
+            resultArea.classList.add("hidden");
+            questionArea.classList.remove("hidden");
+            
+            questionArea.classList.remove("fade-in-up");
+            void questionArea.offsetWidth; 
+            questionArea.classList.add("fade-in-up");
+
+            document.getElementById("question").innerText = currentQ.q;
+            const optionsContainer = document.getElementById("options-container");
+            optionsContainer.innerHTML = ""; 
+            
+            const shuffledOptions = [...currentQ.options].sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach(opt => {
+                const btn = document.createElement("button");
+                btn.className = "mcq-btn";
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(opt);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedOption) {
+            const currentQ = selectedQuestions[currentIndex];
+            const isCorrect = selectedOption === currentQ.a;
+
+            if (isCorrect) correctAnswersCount++;
+
+            const questionArea = document.getElementById("question-area");
+            const resultArea = document.getElementById("result-area");
+
+            questionArea.classList.add("hidden");
+            resultArea.classList.remove("hidden");
+            
+            resultArea.classList.remove("fade-in-up");
+            void resultArea.offsetWidth;
+            resultArea.classList.add("fade-in-up");
+
+            const resultText = document.getElementById("result-text");
+            if (isCorrect) {
+                resultText.innerText = "!  ";
+                resultText.className = "win";
+            } else {
+                resultText.innerText = "!   ";
+                resultText.className = "lose";
+            }
+
+            document.getElementById("correct-answer").innerHTML = `  :<br><strong>${currentQ.a}</strong>`;
+        }
+
+        function nextQuestion() {
+            currentIndex++;
+            loadQuestion();
+        }
+
+        function showFinalScore() {
+            document.getElementById("header-area").classList.add("hidden");
+            document.getElementById("question-area").classList.add("hidden");
+            document.getElementById("result-area").classList.add("hidden");
+            
+            const finalArea = document.getElementById("final-area");
+            finalArea.classList.remove("hidden");
+            finalArea.classList.add("fade-in-up");
+
+            const total = selectedQuestions.length;
+            const percentage = (correctAnswersCount / total) * 100;
+            
+            document.getElementById("final-fraction").innerText = `${correctAnswersCount} / ${total}`;
+
+            const certBox = document.getElementById("cert-box");
+            const commentElement = document.getElementById("score-comment");
+            const titleText = document.getElementById("cert-title-text");
+            const stamp = document.getElementById("cert-stamp");
+
+            //   
+            certBox.classList.remove("passed", "failed");
+
+            //    ( / )
+            if (percentage >= 50) {
+                certBox.classList.add("passed");
+                titleText.innerText = "   ";
+                stamp.innerText = " ";
+                
+                if (percentage >= 90) {
+                    commentElement.innerText = ": ..    ";
+                    commentElement.style.backgroundColor = "#d1fae5";
+                    commentElement.style.color = "#065f46";
+                } else if (percentage >= 70) {
+                    commentElement.innerText = ":  ..   ";
+                    commentElement.style.backgroundColor = "#fef3c7";
+                    commentElement.style.color = "#92400e";
+                } else {
+                    commentElement.innerText = ": ..    ";
+                    commentElement.style.backgroundColor = "#e0f2fe";
+                    commentElement.style.color = "#075985";
+                }
+            } else {
+                //   ()
+                certBox.classList.add("failed");
+                titleText.innerText = "  () ";
+                stamp.innerText = " ";
+                
+                commentElement.innerText = ":  ..       ! ";
+                commentElement.style.backgroundColor = "#fee2e2";
+                commentElement.style.color = "#991b1b";
+            }
+        }
+    </script>
+</body>
+</html>
